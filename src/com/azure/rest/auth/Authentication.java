@@ -18,6 +18,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.microsoft.aad.adal4j.AuthenticationContext;
+
 public class Authentication {
 
 	/*
@@ -26,7 +28,9 @@ public class Authentication {
 	 * Then click on Applications tab and at the bottom you should see
 	 * "View EndPoints". In the endpoints, the tenant_id will show up like this
 	 * in the endpoint url's: https://login.microsoftonline.com/{tenant_id}
-	 * https://blogs.msdn.microsoft.com/azureossds/2015/06/23/authenticating-azure-resource-management-rest-api-requests-using-java/
+	 * https
+	 * ://blogs.msdn.microsoft.com/azureossds/2015/06/23/authenticating-azure
+	 * -resource-management-rest-api-requests-using-java/
 	 */
 	private final static String AUTHORITY = "https://login.windows.net/{eff7f985-dc58-4935-a906-050609be85c3}";
 
@@ -43,7 +47,7 @@ public class Authentication {
 		 */
 
 		HttpGet request = new HttpGet(
-				"https://management.azure.com/subscriptions/{64caccf3-b508-41e7-92ed-d7ed95b32621}/resourceGroups/{paw}/providers/Microsoft.ClassicCompute/virtualMachines?api-version=2014-06-01");
+				"https://management.azure.com/subscriptions/{subscription_id}/resourceGroups/{resourcegroupname}/providers/Microsoft.ClassicCompute/virtualMachines?api-version=2014-06-01");
 		request.addHeader("Authorization", "Bearer " + result.getAccessToken());
 		HttpResponse response = client.execute(request);
 		BufferedReader rd = new BufferedReader(new InputStreamReader(response
@@ -66,9 +70,8 @@ public class Authentication {
 			 * Replace {client_id} with ApplicationID and {password} with
 			 * password that were used to create Service Principal above.
 			 */
-			ClientCredential credential = new ClientCredential(
-					"{0f71f780-ee58-4b65-b466-bfea3e97fe50}",
-					"{6nSRxitLcg/9z8TFKoOV/NJoJnGyVMt78g8+DlU6Dt8=}");
+			ClientCredential credential = new ClientCredential("{client_id}",
+					"{password}");
 			Future<AuthenticationResult> future = context.acquireToken(
 					"https://management.azure.com/", credential, null);
 			result = future.get();
